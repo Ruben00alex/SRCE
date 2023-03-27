@@ -9,7 +9,7 @@
 
       <div class="text-body-2 font-weight-light mb-n1">Welctest2ome to</div>
 
-      <h1 class="text-h2 font-weight-bold">TESTING</h1>
+      <h1 class="text-h2 font-weight-bold">TESTING 2</h1>
 
       <div class="py-14" />
 
