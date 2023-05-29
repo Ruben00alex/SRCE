@@ -1,37 +1,27 @@
 <template>
   <v-app-bar
-    color="primary">
-    <v-app-bar-title> {{ title }} </v-app-bar-title>
-    <template v-slot:append>
-      <v-btn icon="mdi-dots-vertical" color="white"></v-btn>
-      <v-btn icon="mdi-logout" color="white" @click="logOut"></v-btn>
-    </template>
+    density="compact"
+    rounded="lg"
+    border
+    color="transparent"
+    height="79"
+  >
+    <v-app-bar-title
+      style="font-size: 1.6rem; padding: 1rem; width: auto;"
+    >
+      <h4>{{ title }}</h4>
+    </v-app-bar-title>
   </v-app-bar>
 </template>
 
 <script setup>
-import { useRouter } from 'vue-router'
-import { useAccessStore } from '@/store/access'
-import { signOut, getAuth } from 'firebase/auth'
+import {useRouter} from "vue-router";
+import {onMounted, ref} from "vue";
 
 const router = useRouter()
-const store = useAccessStore()
-const auth = getAuth()
-
-  defineProps({
-    title: {
-      type: String,
-      default: 'Dashboard'
-    }
-  })
-
-const logOut = () => {
-  signOut(auth).then(() => {
-    store.$reset()
-    router.push({ name: 'Home' })
-  }).catch((error) => {
-    console.log(error)
-  })
-}
+const title = ref('')
+onMounted(() => {
+   title.value = router.currentRoute.value.meta.title
+})
 
 </script>

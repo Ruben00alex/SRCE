@@ -1,86 +1,103 @@
 <template>
   <div>
     <v-app>
-      <v-app-bar app color="primary" dark>
-        <v-btn icon @click="goBack" color="white">
-          <v-icon>mdi-arrow-left</v-icon>
-        </v-btn>
-        <v-toolbar-title>Gestión de AE</v-toolbar-title>
-      </v-app-bar>
       <v-main>
-        <v-container class="">
-          <v-row>
-            <!--AQUI SE INSTANCIAN LOS BOTONES DE LAS CLASES-->
-            <v-col sm="2" v-for="boton in botones" :key="boton.clave">
-              <v-card>
-                <v-card-actions class="">
-                  <v-btn @click="cargarArbol(boton.ae)">{{
-                    boton.title
-                  }}</v-btn>
-                </v-card-actions>
-              </v-card>
-            </v-col>
+        <side-bar/>
+        <div style="padding: 2rem; margin-left: 50px;">
+          <h1 class="title text-uppercase text-start pb-4">
+            Gestión de Atributos de Egreso
+          </h1>
+          <p class="text-medium-emphasis text-justify">
+            En esta sección podrá gestionar las clases que se encuentran en su cuenta de Google Classroom.
+          </p>
+        </div>
+        <v-container
+          max-height="980"
+          style=" scroll-margin-block: 2rem; scroll-behavior: smooth; margin-left: 25px;"
+          class="d-flex flex-column justify-space-around" color="white"
+        >
+          <v-row class="py-2 px-12">
+            <v-btn
+              v-for="boton in botones" :key="boton.clave"
+              color="#181c25"
+              class="my-2 mx-2"
+              variant="flat"
+              @click="cargarArbol(boton.ae)"
+            >
+              <span class="text-uppercase text-white">{{ boton.title }}</span>
+            </v-btn>
           </v-row>
-          <v-row>
+          <v-spacer class="my-4 mx-auto"></v-spacer>
+          <v-card
+            class="d-flex flex-column justify-space-around mx-md-10"
+            style="padding: 2rem;"
+            color="grey-darken-3"
+            variant="tonal"
+          >
+
             <!--AQUI SE INSTANCIAN LOS VALORES DE LA BD CON RESPECTO AL BOTON SELECCIONADO-->
-            <v-col cols="2">
-              <v-sheet class="pa-2 ma-2">
-                <v-card class="mx-auto pa-2" max-width="300">
-                  <v-list v-model:opened="open">
-                    <v-list-subheader>Atributos de Egreso</v-list-subheader>
-                    <v-col v-for="rama in ramas">
-                      <v-card>
-                        <v-card-actions>
-                          <v-list-item
-                            ><v-btn @click="cargarDerecha(rama.aeDescripcion)"
-                              >AE #{{ rama.idAE }}</v-btn
-                            >
-
-                            <template v-for="hoja in rama.cd">
-                              <v-list-item
-                                ><v-btn @click="cargarDerecha(hoja[1])">{{
-                                  hoja[0]
-                                }}</v-btn>
-
-                                <v-list-item
-                                  ><v-btn @click="cargarIndicador()"
-                                    >Indicador</v-btn
-                                  ></v-list-item
-                                >
-                              </v-list-item>
-                            </template>
+            <v-row class="mx-2">
+              <v-col
+                max-width="100px" min-width="100px" >
+                <v-sheet
+                    color="transparent"
+                    max-width="100px" min-width="100px">
+                  <v-list
+                    v-model:opened="open"
+                    bg-color="white"
+                    max-width="200px"
+                    min-width="200px"
+                  >
+                    <v-list-subheader class="text-uppercase">Atributos de Egreso</v-list-subheader>
+                    <v-list-item v-for="rama in ramas">
+                      <v-btn @click="cargarDerecha(rama.aeDescripcion)" variant="plain" color="#181c25">
+                        #{{ rama.idAE }}
+                      </v-btn>
+                      <template v-for="hoja in rama.cd" >
+                        <v-list-item class="my-2">
+                          <v-btn @click="cargarDerecha(hoja[1])" variant="flat" color="#181c25" class="my-2">
+                            <span class="text-uppercase text-white">{{ hoja[0] }}</span>
+                          </v-btn>
+                          <v-list-item>
+                            <v-btn @click="cargarIndicador()" variant="tonal" color="#181c25" class="my-0">
+                              Indicador
+                            </v-btn>
                           </v-list-item>
-                        </v-card-actions>
-                      </v-card>
-                    </v-col>
+                        </v-list-item>
+                      </template>
+                    </v-list-item>
                   </v-list>
-                </v-card>
-              </v-sheet>
-            </v-col>
-
-            <v-col>
-              <v-sheet class="pa-2 ma-2">
-                <template v-if="mostrarFormulario">
-                  <v-form>
-                    <v-text-field
-                      v-model="texto"
-                      label="Texto"
-                      required
-                    ></v-text-field>
-                    <v-select
-                      v-model="opcionSeleccionada"
-                      :items="opciones.map((opt) => opt.nombre)"
-                      label="Opción"
-                      required
-                    ></v-select>
-                    <!-- Otros campos del formulario si es necesario -->
-                    <v-btn @click="enviarFormulario">Enviar</v-btn>
-                  </v-form>
-                </template>
-                <template v-else>{{ contenidoDerecha }} </template></v-sheet
-              >
-            </v-col>
-          </v-row>
+                </v-sheet>
+              </v-col>
+              <v-divider vertical="true" class="mx-4" style="flex-wrap: wrap; position: relative; "></v-divider>
+              <v-col>
+                <v-sheet
+                  color="transparent"
+                  class="flex-column align-content-center text-justify text-medium-emphasis my-2"
+                  >
+                  <template v-if="mostrarFormulario">
+                    <v-form>
+                      <v-text-field
+                        v-model="texto"
+                        label="Texto"
+                        color=""
+                        required
+                      ></v-text-field>
+                      <v-select
+                        v-model="opcionSeleccionada"
+                        :items="opciones.map((opt) => opt.nombre)"
+                        label="Opción"
+                        required
+                      ></v-select>
+                      <!-- Otros campos del formulario si es necesario -->
+                      <v-btn @click="enviarFormulario" color="grey-darken-4" variant="flat">Enviar</v-btn>
+                    </v-form>
+                  </template>
+                  <template v-else> {{ contenidoDerecha }}</template>
+                </v-sheet>
+              </v-col>
+            </v-row>
+          </v-card>
         </v-container>
       </v-main>
     </v-app>
@@ -88,22 +105,26 @@
 </template>
 
 <script setup>
-import { useRouter } from "vue-router";
-import { defineComponent } from "vue";
-import { onMounted, ref } from "vue";
+import {useRouter} from "vue-router";
+import {defineComponent} from "vue";
+import {onMounted, ref} from "vue";
 import {
   getSelectedCourses,
   getTree,
   getCourseWork,
   getTareasCurso,
 } from "@/services/classroomApi";
+import AppBar from "@/layouts/default/AppBar.vue";
+import SideBar from "@/layouts/default/SideBar.vue";
 
 const router = useRouter();
 const courses = [];
+
 async function goBack() {
   window.history.length > 1 ? router.go(-1) : await router.push("/");
 }
 
+const alert = ref(true);
 const botones = ref([]);
 const ramas = ref([]);
 const contenidoDerecha = ref(
@@ -159,11 +180,12 @@ async function fetchCourses() {
     console.error("Error listing courses:", error);
   }
 }
+
 async function cargarIndicador() {
   const response = await getTareasCurso();
   mostrarFormulario.value = true;
 
-  showCourseWork(response);
+  await showCourseWork(response);
 }
 
 function enviarFormulario() {
@@ -171,6 +193,7 @@ function enviarFormulario() {
   // Por ejemplo, puedes imprimir el valor del campo de texto y la opción seleccionada
   console.log(texto.value, opcionSeleccionada.value);
 }
+
 function cargarDerecha(aeDescripcion) {
   try {
     mostrarFormulario.value = false;
@@ -205,7 +228,6 @@ async function cargarArbol(ae) {
 }
 
 onMounted(async () => {
-  ventanaConfirmar: false;
   await fetchCourses();
 });
 </script>

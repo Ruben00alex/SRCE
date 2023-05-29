@@ -1,43 +1,20 @@
-<!-- Crea un componente que permita iniciar sesión -->
 <template>
-  <div
-    class="auth-wrapper d-flex align-center justify-center pa-4 bg-primary fill-height"
-  >
-    <VCard
-      class="auth-card pa-5 py-7 flex-column justify-center"
-      flat
-      width="548"
-      max-height="760"
-      color="accent"
-      rounded="15"
+  <div class="main_container fade-in">
+    <v-spacer class="mx-auto my-5"></v-spacer>
+    <h1 class="title text-center text-uppercase">
+      Sistema Recolector de <br> Competencias Estudiantiles</h1>
+    <v-btn
+      class="login_button text-uppercase text-center mx-5"
+      style="width: 15vw;"
+      color="#191D26"
+      variant="flat"
+      @click="signInWithGoogle"
     >
-      <VCardItem class="flex-fill justify-center pt-16 pb-4">
-        <template #prepend>
-          <div>
-            <MainLogo size="100%" />
-          </div>
-        </template>
-      </VCardItem>
-
-      <VCardText class="justify-space-between flex-wrap justify-center py-2">
-        <div class="text-h6 font-weight-semibold mb-1 text-center py-2">
-          Bienvenido docente <span class="font-weight-bold"> UABC </span> 👋🏻
-        </div>
-        <p class="text-body-1 text-justify py-3 mx-6">
-          Para acceder al sistema inicie sesión con su cuenta institucional de
-          <b>Google</b>
-        </p>
-      </VCardText>
-
-      <VCardActions class="flex-fill justify-center pt-12 pb-8">
-        <VBtn color="tertiary" variant="tonal" @click="signInWithGoogle">
-          <template #prepend>
-            <VIcon class="mr-2 ms-1">mdi-google</VIcon>
-          </template>
-          Iniciar sesión
-        </VBtn>
-      </VCardActions>
-    </VCard>
+      <v-icon left class="mx-auto" color="#EAE0E0">mdi-google</v-icon>
+      <v-spacer class="mx-2"/>
+      <div class="login_button_text">Iniciar sesión </div>
+    </v-btn>
+    <div class="logo_container"/>
   </div>
 </template>
 
@@ -46,7 +23,6 @@ import { buscarDocente } from "@/services/classroomApi";
 import { ref, onMounted } from "vue";
 import { getAuth, GoogleAuthProvider, signInWithPopup } from "firebase/auth";
 import { useRouter } from "vue-router";
-import MainLogo from "@/assets/SRCELogo.vue";
 import { useAccessStore } from "@/store/access";
 import Swal from "sweetalert2";
 
@@ -77,8 +53,9 @@ const signInWithGoogle = () => {
         console.log(error);
       }
 
-      accessStore.$state.access_token = res._tokenResponse.oauthAccessToken;
-      await router.push({ name: "Dashboard" }); /*
+      accessStore.setAccessToken(res._tokenResponse.oauthAccessToken);
+      accessStore.setUserProps(res.user.displayName, res.user.photoURL, true);
+      await router.push({ name: "Home" }); /*
       } else {
         await Swal.fire({
           icon: 'error',
@@ -96,3 +73,84 @@ const signInWithGoogle = () => {
 
 onMounted(() => {});
 </script>
+
+<style scoped lang="css">
+.main_container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  width:  100vw;
+  background-color: #fffdf6;
+  background-image: url("@/assets/floor.svg");
+  background-repeat: no-repeat;
+  background-size: contain;
+  background-position: bottom;
+}
+
+.logo_container {
+  height: 90vh;
+  width:  100vw;
+  background-image: url("@/assets/login-vector-img.svg");
+  background-repeat: no-repeat;
+  background-size: contain;
+  background-position: bottom;
+  margin-bottom: 3%;
+}
+
+.login_button {
+  width: 13rem;
+  height: 3rem;
+  border-radius: 10px;
+}
+
+.title {
+  font-weight: 900;
+  font-size: 2.5rem;
+  color: #1E1715;
+  margin-bottom: 2%;
+}
+
+.login_button_text {
+  font-weight: 600;
+  font-size: 1rem;
+  color: #EAE0E0;
+  margin: 5% 2%;
+}
+
+/* add fade in transition to all classes in css */
+
+.fade-in {
+  animation: fadeIn ease 1s;
+  -webkit-animation: fadeIn ease 1s;
+  -moz-animation: fadeIn ease 1s;
+  -o-animation: fadeIn ease 1s;
+  -ms-animation: fadeIn ease 1s;
+}
+
+@keyframes fadeIn {
+  0% {opacity:0;}
+  100% {opacity:1;}
+}
+
+@-moz-keyframes fadeIn {
+  0% {opacity:0;}
+  100% {opacity:1;}
+}
+
+@-webkit-keyframes fadeIn {
+  0% {opacity:0;}
+  100% {opacity:1;}
+}
+
+@-o-keyframes fadeIn {
+  0% {opacity:0;}
+  100% {opacity:1;}
+}
+
+@-ms-keyframes fadeIn {
+  0% {opacity:0;}
+  100% {opacity:1;}
+}
+</style>

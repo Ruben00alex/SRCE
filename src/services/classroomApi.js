@@ -21,7 +21,6 @@ export const getTareasCurso = async () => {
     const response = await axios.post(`${API_URL}/courses/getTareasCurso`, {
       token: accessStore.$state.access_token,
     });
-
     return response.data;
   } catch (error) {}
 };

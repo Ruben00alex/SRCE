@@ -15,7 +15,7 @@ import { createVuetify } from 'vuetify'
 import { md3 } from 'vuetify/blueprints'
 import * as components from 'vuetify/components'
 import * as directives from 'vuetify/directives'
-import { VDataTable } from 'vuetify/labs/VDataTable'
+import * as labsComponents from 'vuetify/labs/components'
 
 // https://vuetifyjs.com/en/introduction/why-vuetify/#feature-guides
 export default createVuetify({
@@ -44,6 +44,6 @@ export default createVuetify({
   },
   components: {
     ...components,
-    VDataTable,
+    ...labsComponents,
   }
 })

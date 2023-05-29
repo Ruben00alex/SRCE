@@ -8,24 +8,26 @@ const routes = [
     children: [
       {
         path: '',
-        name: 'Home',
+        name: 'SignIn',
         // route level code-splitting
         // this generates a separate chunk (about.[hash].js) for this route
         // which is lazy-loaded when the route is visited.
-        component: () => import(/* webpackChunkName: "home" */ '@/views/Home.vue'),
+        component: () => import(/* webpackChunkName: "home" */ '@/layouts/default/SignIn'),
       },
     ],
   },
-  //ruta para el dashboard
   {
-    path: '/dashboard',
+    path: '/home',
     component: () => import('@/layouts/default/Default.vue'),
     children: [
       {
         path: '',
-        name: 'Dashboard',
-        component: () => import('@/views/DashboardView.vue'),
-
+        name: 'Home',
+        component: () => import('@/views/Home.vue'),
+        meta: {
+          requiresAuth: true,
+          title: 'Home',
+        }
       }
     ]
   },
@@ -38,7 +40,10 @@ const routes = [
         path: '',
         name: 'Evaluacion',
         component: () => import('@/views/Evaluacion.vue'),
-
+        meta: {
+          requiresAuth: true,
+          title: 'Mis Evaluaciones',
+        }
       }
     ]
   },
@@ -50,7 +55,10 @@ const routes = [
         path: '',
         name: 'GestionAE',
         component: () => import('@/views/GestionAE.vue'),
-
+        meta: {
+          requiresAuth: true,
+          title: 'Gestión de Atributos de Egreso',
+        }
       }
     ]
   },
@@ -62,6 +70,10 @@ const routes = [
         path: '',
         name: 'GestionClases',
         component: () => import('@/views/GestionClases.vue'),
+        meta: {
+          requiresAuth: true,
+          title: 'Mis Asignaturas',
+        }
 
       }
     ]
